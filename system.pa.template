@@ -1,0 +1,22 @@
+#!/usr/bin/pulseaudio -nF
+
+load-module module-native-protocol-unix
+
+### Automatically restore the default sink/source when changed by the user
+### during runtime
+### NOTE: This should be loaded as early as possible so that subsequent modules
+### that look up the default sink/source get the right value
+load-module module-default-device-restore
+
+### Make sure we always have a sink around, even if it is a null sink.
+load-module module-always-sink
+
+##############
+# Custom stuff
+##############
+
+load-module module-cli-protocol-unix
+
+load-module module-native-protocol-tcp auth-anonymous=1
+
+load-module module-pipe-sink file=$PIPE_PATH sink_name=snapcast format=s16le rate=48000
